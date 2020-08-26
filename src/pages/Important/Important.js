@@ -7,7 +7,7 @@ import TaskList from '../../components/TaskList';
 import { addCircleOutline } from 'ionicons/icons';
 import AddTask from '../../components/AddTask';
 
-const Inbox = () => {
+const Important = () => {
   const {user} = React.useContext(UserContext);
   const [showModal, setShowModal] = React.useState(false);
 
@@ -23,7 +23,7 @@ const Inbox = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Inbox</IonTitle>
+          <IonTitle>Important</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -32,14 +32,14 @@ const Inbox = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Inbox</IonTitle>
+            <IonTitle size="large">Important</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <TaskList />
+        <TaskList isImportant={true}/>
         <IonButton onClick={() => setShowModal(true)}><IonIcon icon={addCircleOutline}></IonIcon></IonButton>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Inbox;
+export default Important;

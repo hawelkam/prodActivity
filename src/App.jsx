@@ -28,6 +28,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import Inbox from './pages/Inbox/Inbox';
+import Important from './pages/Important/Important';
 
 const App = () => {
   const [user, setUser] = useAuth();
@@ -39,11 +40,17 @@ const App = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/page/:name" component={Page} exact />
-            <Route path="/inbox" component={Inbox} exact />
-            <Route path="/register" component={Register} exact />
-            <Route path="/login" component={Login} exact />
-            <Redirect from="/" to="/inbox" exact />
+            {user ? (<>
+              <Route path="/page/:name" component={Page} exact />
+              <Route path="/important" component={Important} exact />
+              <Route path="/inbox" component={Inbox} exact />
+              <Redirect from="/" to="/inbox" exact />
+              </>
+            ) : (<>
+              <Route path="/register" component={Register} exact />
+              <Route path="/login" component={Login} exact />
+              <Redirect from="/" to="/login" exact /></>
+            )}
           </IonRouterOutlet>
         </IonSplitPane>
         </UserContext.Provider>

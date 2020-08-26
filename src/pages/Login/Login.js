@@ -33,14 +33,14 @@ const Login = (props) => {
                 <IonButtons slot="start">
                     <IonMenuButton />
                 </IonButtons>
-                <IonTitle>Register</IonTitle>
+                <IonTitle>Log In</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonLoading message={"Please wait..."} isOpen={busy} />
             <IonContent>
                 <IonHeader collapse="condense">
                     <IonToolbar>
-                        <IonTitle size="large">Register</IonTitle>
+                        <IonTitle size="large">Log In</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonItem lines="null">

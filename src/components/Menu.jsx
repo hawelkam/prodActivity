@@ -26,11 +26,12 @@ import {
 } from 'ionicons/icons';
 import './Menu.css';
 import UserContext from '../contexts/UserContext';
+import firebase from '../firebase';
 
 const appPages = [
   {
     title: 'Priorities',
-    url: '/priorities',
+    url: '/important',
     iosIcon: flashOutline,
     mdIcon: flashSharp
   },
@@ -63,13 +64,7 @@ const appPages = [
     url: '/account',
     iosIcon: personCircleOutline,
     mdIcon: personCircleSharp
-  },
-  {
-    title: 'Log Out',
-    url: '/page/Archived',
-    iosIcon: logOutOutline,
-    mdIcon: logOutSharp
-  },
+  }
 ];
 
 const beforeLoginPages = [
@@ -97,7 +92,7 @@ const beforeLoginPages = [
 
 const Menu = () => {
   const location = useLocation();
-  const { user } = React.useContext(UserContext); 
+  const { user } = React.useContext(UserContext);
 
   return (
     <IonMenu contentId="main" type="overlay">
@@ -115,6 +110,14 @@ const Menu = () => {
               </IonMenuToggle>
             );
           })}
+          {user && (
+            <IonMenuToggle key={10} autoHide={false}>
+              <IonItem button onClick={() => {firebase.logout()}} lines="none" detail={false}>
+                <IonIcon slot="start" ios={logOutOutline} md={logOutSharp} />
+                <IonLabel>Log Out</IonLabel>
+              </IonItem>
+            </IonMenuToggle>
+          )}
         </IonList>
 
         {/* <IonList id="labels-list">
