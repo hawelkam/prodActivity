@@ -1,0 +1,7 @@
+{
+  "name": "prodactivity",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
