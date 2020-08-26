@@ -1,4 +1,4 @@
-import { IonItem, IonLabel, IonRow, IonCol, IonButton, IonInput, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonLoading } from '@ionic/react';
+import { IonItem, IonLabel, IonRow, IonCol, IonButton, IonInput, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { Component } from 'react';
 import { withFirebase } from '../../firebase';
 import { Link, withRouter } from 'react-router-dom';

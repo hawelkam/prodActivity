@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { IonHeader, IonButtons, IonMenuButton, IonTitle, IonToolbar, IonLoading, IonPage, IonContent, IonItem, IonLabel, IonInput, IonRow, IonCol, IonButton } from '@ionic/react'
+import { IonHeader, IonButtons, IonMenuButton, IonTitle, IonToolbar, IonPage, IonContent, IonItem, IonLabel, IonInput, IonRow, IonCol, IonButton } from '@ionic/react'
 import { RegisterLink } from '../Register/Register';
 import * as ROUTES from '../../constants/routes';
 import { compose } from 'recompose';

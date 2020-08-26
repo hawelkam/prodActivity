@@ -18,14 +18,12 @@ import {
   layersOutline, layersSharp,
   calendarOutline, calendarSharp,
   personCircleOutline, personCircleSharp,
-  logOutOutline, logOutSharp,
   logInOutline, logInSharp,
   personAddOutline, personAddSharp,
   informationCircleOutline, informationCircleSharp
 } from 'ionicons/icons';
 import './Menu.css';
 import LogoutMenuItem from './LogoutMenuItem';
-import firebase from '../firebase';
 import * as ROUTES from '../constants/routes';
 
 const appPages = [
