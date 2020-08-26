@@ -12,23 +12,17 @@ class Firebase {
         this.db = app.firestore();
     }
 
-    async registerUser(name, email, password) {
-        const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
-        return newUser.user.updateProfile({displayName: name});
-    }
+    registerUser = (email, password) => 
+        this.auth.createUserWithEmailAndPassword(email, password);
 
-    login(email, password) {
-        return this.auth.signInWithEmailAndPassword(email, password)
-    }
+    login = (email, password) => 
+        this.auth.signInWithEmailAndPassword(email, password);
 
-    logout() {
-        return this.auth.signOut()
-    }
+    logout = () => this.auth.signOut();
 
-    resetPassword(email) {
-        return this.auth.sendPasswordResetEmail(email)
-    }
+    resetPassword = (email) => this.auth.sendPasswordResetEmail(email);
+    
+    changePassword = (password) => this.auth.currentUser.updatePassword(password);
 }
 
-const firebase = new Firebase();
-export default firebase;
+export default Firebase;

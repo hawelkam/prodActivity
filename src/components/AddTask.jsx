@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonModal, IonButton, IonItem, IonLabel, IonInput, IonCheckbox } from '@ionic/react';
+import { IonModal, IonButton, IonItem, IonLabel, IonInput, IonCheckbox, IonSelect, IonSelectOption } from '@ionic/react';
 import validateNewTask from '../validators/validateNewTask'
 import useForm from '../hooks/useForm';
 import firebase from '../firebase';
@@ -7,7 +7,6 @@ import firebase from '../firebase';
 const INITIAL_STATE = {
     name: "",
     date: "",
-    project: "",
     category: ""
 }
 
@@ -15,9 +14,12 @@ const AddTask = (props) => {
     const { showModal, setShowModal, user } = props;
     const { handleSubmit, handleChange, values } = useForm(
         INITIAL_STATE, validateNewTask, addNewTask);
-    
+    const [checked, setChecked] = React.useState(false);
+    const [project, setProject] = React.useState("");
+    const [projects, setProjects] = React.useState([]);
+
     function addNewTask() {
-        const { name, date, project, category } = values;
+        const { name, date, category } = values;
         const newTask = {
             name, date, project, category,
             isImportant: checked,
@@ -28,7 +30,26 @@ const AddTask = (props) => {
         firebase.db.collection('tasks').add(newTask);
         setShowModal(false);
     }
-    const [checked, setChecked] = React.useState(false);
+
+    React.useEffect(() => {
+        const unsubscribe = getProjects();
+        return () => unsubscribe();
+        // eslint-disable-next-line
+    }, [])
+
+    function getProjects() {
+        return firebase.db.collection("projects")
+            .where("userId", "==", user.uid)
+            .where("state", "==", "open")
+            .onSnapshot(handleSnapshot);
+    }
+
+    function handleSnapshot(snapshot) {
+        const projects = snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+        });
+        setProjects(projects);
+    }
 
     return (
         <IonModal isOpen={showModal} cssClass='my-custom-class' onDidDismiss={() => setShowModal(false)}>
@@ -45,9 +66,15 @@ const AddTask = (props) => {
             <IonLabel position="floating">Important</IonLabel>
             <IonCheckbox checked={checked} onIonChange={e => setChecked(e.detail.checked)} />
         </IonItem>
-        <IonItem lines="null">
-            <IonLabel position="floating">Project</IonLabel>
-            <IonInput name="project" type="text" value={values.project} onIonChange={handleChange}></IonInput>
+        <IonItem>
+            <IonLabel>Project</IonLabel>
+            <IonSelect placeholder="Select One" value={project} onIonChange={e => {
+                console.log(e);
+                setProject(e.detail.value)}}>
+                {projects.map(project => (
+                    <IonSelectOption key={project.id} value={project.id}>{project.name}</IonSelectOption>
+                ))}
+            </IonSelect>
         </IonItem>
         <IonItem lines="null">
             <IonLabel position="floating">Category</IonLabel>

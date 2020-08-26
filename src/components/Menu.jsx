@@ -7,7 +7,6 @@ import {
   IonListHeader,
   IonMenu,
   IonMenuToggle,
-  IonNote,
 } from '@ionic/react';
 
 import React from 'react';
@@ -25,8 +24,9 @@ import {
   informationCircleOutline, informationCircleSharp
 } from 'ionicons/icons';
 import './Menu.css';
-import UserContext from '../contexts/UserContext';
+import LogoutMenuItem from './LogoutMenuItem';
 import firebase from '../firebase';
+import * as ROUTES from '../constants/routes';
 
 const appPages = [
   {
@@ -37,7 +37,7 @@ const appPages = [
   },
   {
     title: 'Inbox',
-    url: '/inbox',
+    url: ROUTES.INBOX,
     iosIcon: fileTrayOutline,
     mdIcon: fileTraySharp
   },
@@ -61,7 +61,13 @@ const appPages = [
   },
   {
     title: 'Account',
-    url: '/account',
+    url: ROUTES.ACCOUNT,
+    iosIcon: personCircleOutline,
+    mdIcon: personCircleSharp
+  },
+  {
+    title: 'Admin',
+    url: ROUTES.ADMIN,
     iosIcon: personCircleOutline,
     mdIcon: personCircleSharp
   }
@@ -70,13 +76,13 @@ const appPages = [
 const beforeLoginPages = [
   {
     title: 'Login',
-    url: '/login',
+    url: ROUTES.SIGN_IN,
     iosIcon: logInOutline,
     mdIcon: logInSharp
   },
   {
     title: 'Register',
-    url: '/register',
+    url: ROUTES.SIGN_UP,
     iosIcon: personAddOutline,
     mdIcon: personAddSharp
   },
@@ -90,17 +96,16 @@ const beforeLoginPages = [
 
 //const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
-const Menu = () => {
+const Menu = ({ authUser }) => {
   const location = useLocation();
-  const { user } = React.useContext(UserContext);
 
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
           <IonListHeader>ProdActivity</IonListHeader>
-          <IonNote>{(user && user.email) || ""}</IonNote>
-          {(user ? appPages : beforeLoginPages).map((appPage, index) => {
+          {/* <IonNote>{(user && user.email) || ""}</IonNote> */}
+          {(authUser ? appPages : beforeLoginPages).map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
@@ -110,14 +115,7 @@ const Menu = () => {
               </IonMenuToggle>
             );
           })}
-          {user && (
-            <IonMenuToggle key={10} autoHide={false}>
-              <IonItem button onClick={() => {firebase.logout()}} lines="none" detail={false}>
-                <IonIcon slot="start" ios={logOutOutline} md={logOutSharp} />
-                <IonLabel>Log Out</IonLabel>
-              </IonItem>
-            </IonMenuToggle>
-          )}
+          <LogoutMenuItem />
         </IonList>
 
         {/* <IonList id="labels-list">

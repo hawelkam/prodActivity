@@ -1,12 +1,10 @@
 import React from 'react'
 import firebase from '../firebase'
-import { IonList, IonItem, IonCheckbox, IonLabel } from '@ionic/react';
-import UserContext from '../contexts/UserContext';
+import { IonList } from '@ionic/react';
 import Task from './Task';
 
 const TaskList = (props) => {
     const [tasks, setTasks] = React.useState([]);
-    const {user} = React.useContext(UserContext);
 
     React.useEffect(() => {
         const unsubscribe = getTasks(props.isImportant);
@@ -17,12 +15,12 @@ const TaskList = (props) => {
     function getTasks(isImportant) {
         return isImportant ? 
         firebase.db.collection("tasks")
-            .where("userId", "==", user.uid)
+            .where("userId", "==", props.authUser.uid)
             .where("isFinished", "==", false)
             .where("isImportant", "==", true)
             .onSnapshot(handleSnapshot)
          : firebase.db.collection("tasks")
-            .where("userId", "==", user.uid)
+            .where("userId", "==", props.authUser.uid)
             .where("isFinished", "==", false)
             .onSnapshot(handleSnapshot);
     }

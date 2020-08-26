@@ -1,12 +1,11 @@
 import Menu from './components/Menu';
 import Page from './pages/Page';
-import React from 'react';
+import React, { Component } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
-import useAuth from './hooks/useAuth'
 import UserContext from './contexts/UserContext'
 
 /* Core CSS required for Ionic components to work properly */
@@ -29,34 +28,60 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Inbox from './pages/Inbox/Inbox';
 import Important from './pages/Important/Important';
+import Projects from './pages/Projects/Projects';
+import ProjectDetails from './pages/Projects/ProjectDetails';
+import * as ROUTES from './constants/routes';
+import LandingPage from './pages/Landing/LandingPage';
+import AccountPage from './pages/Account/AccountPage';
+import AdminPage from './pages/Admin/AdminPage';
+import { withFirebase } from "./firebase";
 
-const App = () => {
-  const [user, setUser] = useAuth();
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <IonApp>
-      <IonReactRouter>
-        <UserContext.Provider value={{user, setUser}}>
-        <IonSplitPane contentId="main">
-          <Menu />
-          <IonRouterOutlet id="main">
-            {user ? (<>
-              <Route path="/page/:name" component={Page} exact />
-              <Route path="/important" component={Important} exact />
-              <Route path="/inbox" component={Inbox} exact />
-              <Redirect from="/" to="/inbox" exact />
-              </>
-            ) : (<>
-              <Route path="/register" component={Register} exact />
-              <Route path="/login" component={Login} exact />
-              <Redirect from="/" to="/login" exact /></>
-            )}
-          </IonRouterOutlet>
-        </IonSplitPane>
-        </UserContext.Provider>
-      </IonReactRouter>
-    </IonApp>
-  );
-};
+    this.state = {
+      authUser: null
+    };
+  }
 
-export default App;
+  componentDidMount() {
+    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+      authUser ?
+        this.setState({ authUser }) :
+        this.setState({ authUser: null });
+    });
+  }
+
+  componentWillUnmount() {
+    this.listener();
+  }
+  
+  render() {
+    return (
+      <IonApp>
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <Menu authUser={this.state.authUser} />
+            <IonRouterOutlet id="main">
+                <Route path="/important" component={Important} exact />
+                <Route path={ROUTES.INBOX} render={() => (
+                  <Inbox authUser={this.state.authUser} />
+                )} exact />
+                <Route path="/projects" component={Projects} exact />
+                <Route path="/projects/:id" component={ProjectDetails} exact />
+                <Route path={ROUTES.ACCOUNT} component={AccountPage} exact />
+                <Route path={ROUTES.ADMIN} component={AdminPage} exact />
+                <Route path={ROUTES.LANDING} component={LandingPage} exact />
+                <Route path={ROUTES.SIGN_UP} component={Register} exact />
+                <Route path={ROUTES.SIGN_IN} component={Login} exact />
+                <Redirect from="/" to="/login" exact />
+            </IonRouterOutlet>
+          </IonSplitPane>
+        </IonReactRouter>
+      </IonApp>
+    );
+  }
+}
+
+export default withFirebase(App);
