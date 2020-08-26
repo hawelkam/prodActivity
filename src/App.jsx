@@ -4,6 +4,10 @@ import React from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
+import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
+import useAuth from './hooks/useAuth'
+import UserContext from './contexts/UserContext'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,18 +28,23 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => {
+const App = () => {
+  const [user, setUser] = useAuth();
 
   return (
     <IonApp>
       <IonReactRouter>
+        <UserContext.Provider value={{user, setUser}}>
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/page/:name" component={Page} exact />
+            <Route path="/register" component={Register} exact />
+            <Route path="/login" component={Login} exact />
             <Redirect from="/" to="/page/Inbox" exact />
           </IonRouterOutlet>
         </IonSplitPane>
+        </UserContext.Provider>
       </IonReactRouter>
     </IonApp>
   );

@@ -1,13 +1,20 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React from 'react';
-import { useParams } from 'react-router';
+import { useParams, Redirect } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
+import UserContext from '../contexts/UserContext';
 import './Page.css';
 
-const Page: React.FC = () => {
+const Page = (props) => {
+  const {user} = React.useContext(UserContext);
 
-  const { name } = useParams<{ name: string; }>();
+  const { name } = useParams();
 
+  if (!user) {
+    return (
+      <Redirect to="/register"/>
+    )
+  }
   return (
     <IonPage>
       <IonHeader>
